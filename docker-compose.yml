@@ -24,7 +24,7 @@ services:
       - ./data/skills:/data/skills:ro
       - ./data/audio:/data/audio
     ports:
-      - "8080:8080"
+      - "2993:8080"
     # 3 GB CT: 2 GB fuer den Agent, ~700 MB bleiben fuer Docker-Daemon,
     # Piper und den Kernel des CT uebrig. Ohne mem_limit wuerde der Agent
     # bei einem Speicherleck den kompletten CT und damit alle anderen
