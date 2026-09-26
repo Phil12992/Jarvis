@@ -1,0 +1,66 @@
+# Bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+.venv-*/
+venv/
+env/
+
+# Test artifacts
+.venv-test/
+htmlcov/
+.coverage
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment
+.env
+.env.local
+*.env
+
+# Data (persisted at runtime)
+data/
+*.db
+*.db-journal
+*.sqlite
+*.sqlite-journal
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build
+dist/
+build/
+*.egg-info/
+pip-wheel-metadata/
+
+# Deployment
+deploy/*.pem
+deploy/*.key
+*.ovpn
+
+# Audio cache
+*.wav
+*.mp3
+*.ogg
+*.opus
+
+# Temporary
+tmp/
+temp/
+*.tmp

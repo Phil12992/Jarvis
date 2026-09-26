@@ -1,0 +1,46 @@
+# JARVIS agent harness.
+#
+# Bewusst EIN Container. Auf einem CT mit 3 GB RAM kostet jeder weitere
+# Container (Docker-Daemon, Postgres, Qdrant) mehr, als er hier bringt.
+# Daten liegen auf Volumes, nicht im Container-Dateisystem.
+#
+# Start:  docker compose up -d
+# Logs :  docker compose logs -f
+
+services:
+  agent:
+    build:
+      context: .
+      dockerfile: deploy/Dockerfile
+    container_name: jarvis
+    restart: unless-stopped
+    init: true
+    env_file:
+      - .env
+    volumes:
+      # Auf dem Proxmox-Host unter /opt/jarvis/data anlegen und einhaengen,
+      # damit Memory und Skills einen CT-Neustart und ein Backup ueberleben.
+      - ./data/memory:/data/memory
+      - ./data/skills:/data/skills:ro
+      - ./data/audio:/data/audio
+    ports:
+      - "8080:8080"
+    # 3 GB CT: 2 GB fuer den Agent, ~700 MB bleiben fuer Docker-Daemon,
+    # Piper und den Kernel des CT uebrig. Ohne mem_limit wuerde der Agent
+    # bei einem Speicherleck den kompletten CT und damit alle anderen
+    # Container auf dem Host killen.
+    mem_limit: 2g
+    mem_reservation: 512m
+    cpus: 1.5
+    pids_limit: 256
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request;urllib.request.urlopen('http://127.0.0.1:8080/healthz',timeout=5)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
